@@ -9,7 +9,6 @@ class User(Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
 
-# utworzenie tabeli, jeśli nie istnieje
 from database import engine
 Base.metadata.create_all(bind=engine)
 
