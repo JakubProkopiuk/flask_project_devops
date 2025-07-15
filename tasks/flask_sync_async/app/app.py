@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
@@ -30,9 +33,23 @@ def form():
         return redirect(url_for("thankyou"))
     return render_template("form.html")
 
+@app.route("/async-form", methods=["GET", "POST"])
+def async_form():
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        from celery_app import save_user_async
+        save_user_async.delay(name, email)
+        return redirect(url_for("thankyou_async"))
+    return render_template("async_form.html")
+
 @app.route("/thankyou")
 def thankyou():
     return render_template("thankyou.html")
+
+@app.route("/thankyou_async")
+def thankyou_async():
+    return render_template("thankyou_async.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
