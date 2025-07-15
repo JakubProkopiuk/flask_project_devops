@@ -1,3 +1,21 @@
+# Flask & FastAPI DevOps project
+
+Small recruitment assignment that showcases:
+
+* **Task 1 · Flask**  
+  * sync form → SQLite  
+  * async form (Celery + Redis)
+* **Task 2 · FastAPI**  
+  * the same features, fully ASGI
+* **Task 3 · Deploy & benchmark**  
+  * three production stacks behind **nginx**  
+    1. Flask + uWSGI  
+    2. Flask + Uvicorn (ASGI)  
+    3. FastAPI + Uvicorn  
+  * containerised with **Docker Compose**  
+  * load-tested on **loader.io**
+
+
 ## Performance summary (loader.io – 250 clients / 1 min)
 
 | Stack | Avg. response time | Successful responses | Report |
