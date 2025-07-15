@@ -27,3 +27,17 @@ async def post_form(name: str = Form(...), email: str = Form(...)):
 async def thank_you(request: Request):
     return templates.TemplateResponse("thankyou.html", {"request": request})
 
+@app.get("/async-form", response_class=HTMLResponse)
+async def get_async_form(request: Request):
+    return templates.TemplateResponse("async_form.html", {"request": request})
+
+@app.post("/async-form")
+async def post_async_form(name: str = Form(...), email: str = Form(...)):
+    from celery_app import save_user_async
+    save_user_async.delay(name, email)
+    return RedirectResponse("/thankyou_async", status_code=302)
+
+@app.get("/thankyou_async", response_class=HTMLResponse)
+async def thank_you_async(request: Request):
+    return templates.TemplateResponse("thankyou_async.html", {"request": request})
+
